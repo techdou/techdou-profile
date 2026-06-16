@@ -1,0 +1,11 @@
+# macOS / Windows clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Separate project — managed in its own GitHub repo
+/pet/
+
+# Editor / OS cruft
+*.log
+node_modules/
