@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>豆秀禄 | AI Agent Engineer</title>
+    <title>Projects · Techdou</title>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=Work+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         /* === DESIGN TOKENS (Vintage Editorial) === */
@@ -16,9 +16,9 @@
             --accent-warm: #e8d4c0;
             --accent-terracotta: #c0785a;
             --border-color: rgba(0,0,0,0.08);
+            --border-strong: rgba(0,0,0,0.16);
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
             --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
             --radius: 12px;
             --font-display: 'Fraunces', 'Noto Serif SC', serif;
             --font-body: 'Work Sans', 'Noto Sans SC', sans-serif;
@@ -29,9 +29,7 @@
 
         /* === RESET === */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        
         html { scroll-behavior: smooth; }
-        
         body {
             font-family: var(--font-cn-body);
             background: var(--bg-cream);
@@ -42,552 +40,31 @@
         }
 
         /* === BACKGROUND DECORATIONS === */
-        .bg-decoration {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .bg-circle {
-            width: 500px; height: 500px;
-            border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.04);
-            top: -100px; right: -100px;
-        }
-        .bg-line {
+        .bg-decoration { position: fixed; pointer-events: none; z-index: 0; }
+        .bg-line-v {
             width: 1px; height: 200vh;
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.04), transparent);
-            right: 15%; top: 0;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05), transparent);
         }
+        .bg-line-v-1 { left: 12%; top: 0; }
+        .bg-line-v-2 { right: 12%; top: 0; }
         .bg-dot {
-            width: 8px; height: 8px;
+            width: 7px; height: 7px;
             border-radius: 50%;
             background: var(--accent-warm);
         }
-        .bg-dot-1 { top: 30%; left: 8%; }
-        .bg-dot-2 { top: 60%; right: 10%; }
-        .bg-geo {
-            top: 20%; left: 5%;
-            width: 60px; height: 60px;
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 50%;
-        }
+        .bg-dot-1 { top: 22%; left: 12%; transform: translateX(-50%); }
+        .bg-dot-2 { top: 65%; right: 12%; transform: translateX(50%); }
 
         /* === LAYOUT === */
         .container {
-            max-width: 960px;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 0 clamp(20px, 5vw, 48px);
+            padding: 0 clamp(24px, 6vw, 64px);
             position: relative;
             z-index: 1;
         }
 
-        /* === HERO (Spotlight Style) === */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
-            background: var(--bg-cream);
-            cursor: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-
-
-        /* Scrolling text pattern */
-        .hero-pattern {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(16px, 3vh, 32px);
-            overflow: hidden;
-            opacity: 0.07;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .hero-pattern-row {
-            white-space: nowrap;
-            width: 100%;
-            font-size: clamp(32px, 5vw, 64px);
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            color: var(--text-primary);
-        }
-
-        @keyframes scroll-left {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        @keyframes scroll-right {
-            from { transform: translateX(-50%); }
-            to { transform: translateX(0); }
-        }
-        .scroll-left { animation: scroll-left 40s linear infinite; }
-        .scroll-right { animation: scroll-right 40s linear infinite; }
-
-        /* Text layer */
-        .hero-text-layer {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .hero-greeting {
-            font-family: var(--font-body);
-            font-size: clamp(16px, 2.2vw, 22px);
-            font-weight: 400;
-            letter-spacing: 0.3em;
-            color: var(--text-muted);
-            margin-bottom: clamp(8px, 1.5vh, 16px);
-        }
-
-        .hero-main-text {
-            font-family: var(--font-display);
-            font-size: clamp(64px, 11vw, 140px);
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.03em;
-            color: var(--text-primary);
-            margin-bottom: clamp(12px, 2vh, 24px);
-        }
-
-        .hero-accent {
-            color: var(--accent-terracotta);
-        }
-
-        .hero-subtitle {
-            font-family: var(--font-body);
-            font-size: clamp(14px, 1.5vw, 18px);
-            font-weight: 400;
-            color: var(--text-muted);
-            letter-spacing: 0.05em;
-        }
-
-        /* Spotlight layer */
-        .hero-spotlight {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            z-index: 3;
-            clip-path: circle(0px at -1000px -1000px);
-            transition: clip-path 0.08s ease-out;
-        }
-
-        .hero-spotlight-bg {
-            position: absolute;
-            inset: 0;
-            background: #1a1a1a;
-        }
-
-        .hero-spotlight-pattern {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: clamp(16px, 3vh, 32px);
-            overflow: hidden;
-            opacity: 0.12;
-        }
-
-        .hero-spotlight-pattern .hero-pattern-row {
-            color: rgba(255,255,255,0.3);
-        }
-
-        .hero-spotlight-text {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-spotlight-text .hero-greeting {
-            color: rgba(255,255,255,0.6);
-        }
-        .hero-spotlight-text .hero-main-text {
-            color: #ffffff;
-        }
-        .hero-spotlight-text .hero-accent {
-            color: var(--accent-warm);
-        }
-        .hero-spotlight-text .hero-subtitle {
-            color: rgba(255,255,255,0.5);
-        }
-
-        /* Custom cursor */
-        .hero-cursor {
-            position: fixed;
-            width: 12px; height: 12px;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 100;
-            mix-blend-mode: difference;
-            opacity: 0;
-            transition: opacity 0.1s ease-out;
-        }
-
-        /* Bottom fade */
-        .hero-fade {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 120px;
-            background: linear-gradient(to top, var(--bg-cream), transparent);
-            pointer-events: none;
-            z-index: 4;
-        }
-
-        /* === PROFILE SECTION === */
-        .profile-section { padding: clamp(48px, 6vh, 80px) 0 clamp(32px, 4vh, 48px); }
-        .profile-grid { display: grid; grid-template-columns: auto 1fr; gap: clamp(32px, 5vw, 64px); align-items: center; }
-        .profile-photo-wrap { position: relative; }
-        .profile-photo { width: clamp(200px, 24vw, 280px); height: clamp(240px, 29vw, 340px); object-fit: cover; object-position: top; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
-        .profile-photo-frame { position: absolute; inset: 8px -8px -8px 8px; border: 2px solid var(--accent-warm); border-radius: var(--radius); z-index: -1; }
-        .profile-text { display: flex; flex-direction: column; gap: clamp(10px, 1.5vh, 16px); }
-        .profile-label { font-family: var(--font-body); font-size: clamp(11px, 1.2vw, 13px); font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-terracotta); }
-        .profile-name { font-family: var(--font-cn-display); font-size: clamp(40px, 5vw, 56px); font-weight: 900; line-height: 1.2; letter-spacing: -0.02em; }
-        .profile-name-en { font-family: var(--font-display); font-size: clamp(18px, 2vw, 24px); font-weight: 300; font-style: italic; color: var(--text-muted); }
-        .profile-divider { width: 48px; height: 2px; background: var(--accent-terracotta); border-radius: 1px; }
-        .profile-bio { font-size: clamp(15px, 1.4vw, 17px); color: var(--text-secondary); max-width: 480px; line-height: 1.8; }
-        .profile-links { display: flex; gap: 12px; margin-top: 4px; }
-        .profile-link { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 100px; font-family: var(--font-body); font-size: 13px; font-weight: 500; text-decoration: none; transition: all 0.3s var(--ease); border: 2px solid var(--border-color); color: var(--text-secondary); background: var(--bg-card); }
-        .profile-link:hover { border-color: var(--accent-terracotta); color: var(--accent-terracotta); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-        .domain-icon svg { width: 32px; height: 32px; }
-        .tech-marker svg { width: 24px; height: 24px; }
-        .training-icon-wrap svg { width: 40px; height: 40px; }
-        @media (max-width: 700px) { .profile-grid { grid-template-columns: 1fr; text-align: center; justify-items: center; } .profile-links { justify-content: center; } }
-
-        /* === SECTIONS === */
-        .section {
-            padding: clamp(48px, 6vh, 80px) 0;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: clamp(24px, 3vh, 36px);
-        }
-
-        .section-number {
-            font-family: var(--font-display);
-            font-size: clamp(28px, 3vw, 36px);
-            font-weight: 900;
-            color: var(--accent-warm);
-            line-height: 1;
-        }
-
-        .section-title {
-            font-family: var(--font-cn-display);
-            font-size: clamp(24px, 2.8vw, 32px);
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.01em;
-        }
-
-        .section-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
-
-        /* === CORE DOMAINS === */
-        .domains-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-            gap: clamp(16px, 2vw, 24px);
-        }
-
-        .domain-card {
-            padding: clamp(20px, 2.5vw, 28px);
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            transition: all 0.3s var(--ease);
-            position: relative;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .domain-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px; height: 100%;
-            background: var(--accent-terracotta);
-            opacity: 0;
-            transition: opacity 0.3s var(--ease);
-        }
-
-        .domain-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .domain-card:hover::before { opacity: 1; }
-
-        .domain-icon {
-            font-size: 28px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-        }
-
-        .domain-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.60);
-            border-radius: var(--radius);
-            z-index: 0;
-        }
-        .domain-card > * { position: relative; z-index: 1; }
-        .domain-card:nth-child(1) { background-image: url('assets/domain-bg-agent.png'); }
-        .domain-card:nth-child(2) { background-image: url('assets/domain-bg-coding.png'); }
-        .domain-card:nth-child(3) { background-image: url('assets/domain-bg-automation.png'); }
-        .domain-card:nth-child(4) { background-image: url('assets/domain-bg-lobster.png'); }
-
-        .domain-title {
-            font-family: var(--font-cn-display);
-            font-size: clamp(18px, 1.8vw, 20px);
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .domain-desc {
-            font-size: clamp(14px, 1.4vw, 15px);
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* === TECH BACKGROUND === */
-        .tech-list {
-            display: flex;
-            flex-direction: column;
-            gap: clamp(16px, 2vh, 24px);
-        }
-
-        .tech-item {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .tech-marker {
-            flex-shrink: 0;
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            margin-top: 2px;
-        }
-
-        .tech-marker-1 { background: rgba(192, 120, 90, 0.1); }
-        .tech-marker-2 { background: rgba(184, 151, 106, 0.15); }
-        .tech-marker-3 { background: rgba(100, 140, 160, 0.12); }
-
-        .tech-title {
-            font-family: var(--font-cn-body);
-            font-size: clamp(16px, 1.5vw, 17px);
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .tech-desc {
-            font-size: clamp(14px, 1.4vw, 15px);
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* === TRAINING === */
-        .training-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: clamp(24px, 3vw, 36px);
-            border: 1px solid var(--border-color);
-            display: flex;
-            gap: clamp(20px, 3vw, 32px);
-            align-items: center;
-        }
-
-        .training-icon-wrap {
-            flex-shrink: 0;
-            width: 72px; height: 72px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--accent-warm), rgba(192, 120, 90, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-
-        .training-text {
-            font-size: clamp(15px, 1.5vw, 17px);
-            color: var(--text-secondary);
-            line-height: 1.8;
-        }
-
-        .training-text strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .training-schools {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .school-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 12px;
-            font-weight: 500;
-            border: 1px solid var(--border-color);
-            background: var(--bg-cream);
-            color: var(--text-secondary);
-        }
-
-        /* === CONTACT === */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-            gap: clamp(16px, 2vw, 24px);
-        }
-
-        .contact-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            padding: clamp(20px, 2.5vw, 28px);
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-color);
-            text-decoration: none;
-            transition: all 0.3s var(--ease);
-        }
-
-        .contact-card:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
-        }
-
-        .contact-card svg {
-            width: 24px; height: 24px;
-            color: var(--accent-terracotta);
-        }
-
-        .contact-label {
-            font-family: var(--font-cn-body);
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .contact-value {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .wechat-qr {
-            width: 100px; height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid var(--border-color);
-        }
-
-        /* === FOOTER === */
-        .footer {
-            padding: clamp(32px, 4vh, 48px) 0;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            margin-top: clamp(24px, 3vh, 48px);
-        }
-
-        .footer-text {
-            font-family: var(--font-display);
-            font-size: 13px;
-            font-style: italic;
-            color: var(--text-muted);
-        }
-
-        .footer-geo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .footer-geo span {
-            display: block;
-        }
-
-        .footer-geo .circle {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--accent-warm);
-        }
-
-        .footer-geo .line {
-            width: 48px; height: 1px;
-            background: var(--border-color);
-        }
-
-        /* === SCROLL ANIMATIONS === */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-d1 { transition-delay: 0.1s; }
-        .reveal-d2 { transition-delay: 0.2s; }
-        .reveal-d3 { transition-delay: 0.3s; }
-
-        /* === RESPONSIVE === */
-        @media (max-width: 700px) {
-            .training-card { flex-direction: column; text-align: center; }
-            .training-schools { justify-content: center; }
-        }
-
-        /* Hide mobile Chinese on desktop */
-        .hero-mobile-cn {
-            display: none;
-        }
-
+        /* === TOP NAV === */
         .top-nav {
             position: fixed;
             top: 20px;
@@ -596,36 +73,322 @@
             display: flex;
             gap: 8px;
         }
-
         .nav-pill {
-            padding: 6px 14px;
+            padding: 7px 16px;
             border-radius: 100px;
             border: 1.5px solid var(--border-color);
             background: var(--bg-card);
             font-family: var(--font-body);
             font-size: 12px;
             font-weight: 600;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.3s var(--ease);
+            text-decoration: none;
         }
         .nav-pill:hover {
             border-color: var(--accent-terracotta);
             color: var(--accent-terracotta);
+            transform: translateY(-1px);
         }
 
-        @media (max-width: 768px) {
-            .hero-spotlight { display: none !important; }
-            .hero-cursor { display: none !important; }
-            .hero-text-layer { position: relative !important; display: flex !important; flex-direction: column; gap: 32px; }
-            .hero-text-layer .hero-main-text { font-size: clamp(36px, 12vw, 64px); }
-            .hero-mobile-cn { display: block !important; text-align: center; }
-            .hero-mobile-cn .hero-greeting { color: var(--text-muted); font-size: clamp(12px, 3vw, 16px); }
-            .hero { display: none !important; }
-            .hero-mobile-cn .hero-main-text { color: var(--text-primary); font-size: clamp(42px, 13vw, 72px); }
-            .hero-mobile-cn .hero-accent { color: var(--accent-terracotta); }
-            .hero-mobile-cn .hero-subtitle { color: var(--text-muted); font-size: clamp(12px, 3vw, 14px); }
+        /* === HERO (Big Typographic Cover) === */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            padding: clamp(120px, 16vh, 200px) 0 clamp(40px, 6vh, 80px);
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(64px, 16vw, 220px);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+        }
+        .hero-title .word-cn {
+            font-family: var(--font-cn-display);
+            display: block;
+        }
+        .hero-title em {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent-terracotta);
+            display: block;
+            font-size: 0.42em;
+            letter-spacing: -0.01em;
+            margin-top: 0.12em;
+        }
+
+        /* === WORKS (Table Style) === */
+        .works {
+            padding: clamp(8px, 2vh, 24px) 0 clamp(48px, 6vh, 80px);
+        }
+
+        .work-table {
+            border-top: 1px solid var(--border-strong);
+        }
+
+        .work-row {
+            display: flex;
+            gap: clamp(24px, 4vw, 64px);
+            align-items: center;
+            padding: clamp(32px, 4.5vh, 56px) 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.4s var(--ease);
+            text-decoration: none;
+            color: inherit;
+        }
+        .work-row:nth-child(even) { flex-direction: row-reverse; }
+        .work-row:hover { background: rgba(192,120,90,0.035); }
+
+        .work-icon-cell {
+            flex-shrink: 0;
+        }
+        .work-icon {
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--icon-bg);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.4s var(--ease);
+        }
+        .work-row:hover .work-icon { transform: scale(1.06) rotate(-2deg); }
+        .work-icon svg {
+            width: 24px; height: 24px;
+            stroke: rgba(255,255,255,0.92);
+            fill: none;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .icon-1 { --icon-bg: #c0785a; }
+        .icon-2 { --icon-bg: #2b2b2b; }
+        .icon-3 { --icon-bg: #b8976a; }
+        .icon-4 { --icon-bg: #9c6b7a; }
+        .icon-5 { --icon-bg: #6b8ca0; }
+        .icon-6 { --icon-bg: #7d8c6a; }
+
+        .work-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .work-head {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .work-num {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 2vw, 26px);
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
+        .work-tag {
+            font-family: var(--font-body);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent-terracotta);
+        }
+        .work-domain {
+            margin-left: auto;
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .work-domain svg { transition: transform 0.3s var(--ease); }
+        .work-row:hover .work-domain svg { transform: translate(2px, -2px); }
+        .work-title {
+            font-family: var(--font-cn-display);
+            font-size: clamp(22px, 2.8vw, 34px);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+        .work-title-en {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.62em;
+        }
+        .work-desc {
+            font-size: clamp(14px, 1.3vw, 16px);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 620px;
+        }
+        .work-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 4px;
+        }
+        .stack-chip {
+            padding: 3px 11px;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-muted);
+        }
+
+        /* === TIMELINE === */
+        .timeline-section {
+            padding: clamp(64px, 9vh, 112px) 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .section-label {
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: clamp(12px, 2vh, 20px);
+        }
+        .section-label::before {
+            content: '';
+            width: 24px; height: 1px;
+            background: var(--accent-terracotta);
+        }
+        .timeline-title {
+            font-family: var(--font-cn-display);
+            font-size: clamp(24px, 2.8vw, 34px);
+            font-weight: 700;
+            margin-bottom: clamp(8px, 1.5vh, 14px);
+        }
+        .timeline-sub {
+            font-size: clamp(14px, 1.3vw, 16px);
+            color: var(--text-muted);
+            margin-bottom: clamp(40px, 6vh, 64px);
+            max-width: 480px;
+        }
+        .timeline {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(16px, 3vw, 40px);
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 7px; left: 0; right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+        .tl-node {
+            position: relative;
+            padding-top: 28px;
+        }
+        .tl-node::before {
+            content: '';
+            position: absolute;
+            top: 3px; left: 0;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--bg-cream);
+            border: 2px solid var(--accent-terracotta);
+        }
+        .tl-node:last-child::before { background: var(--accent-terracotta); }
+        .tl-year {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 2vw, 26px);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .tl-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* === FOOTER === */
+        .footer {
+            padding: clamp(40px, 5vh, 64px) 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        .footer-quote {
+            font-family: var(--font-display);
+            font-size: clamp(16px, 1.8vw, 22px);
+            font-style: italic;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .footer-geo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+        }
+        .footer-geo .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-warm); }
+        .footer-geo .line { width: 44px; height: 1px; background: var(--border-color); }
+        .footer-copy {
+            margin-top: 20px;
+            font-family: var(--font-body);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* === REVEAL === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+
+        /* === PET IFRAME === */
+        #petFrame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: 0;
+            z-index: 900;
+            pointer-events: none;
+            background: transparent;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 820px) {
+            .work-row, .work-row:nth-child(even) { flex-direction: row; }
+            .timeline { grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+            .timeline::before { display: none; }
+            .tl-node { padding-top: 0; padding-left: 20px; border-left: 1px solid var(--border-color); }
+            .tl-node::before { left: -6px; top: 4px; }
+            .work-domain { margin-left: 0; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -636,213 +399,236 @@
 </head>
 <body>
 
-<!-- Top Navigation -->
+<!-- Top Nav -->
 <div class="top-nav">
-    <a href="https://edu.techdou.com" target="_blank" class="nav-pill" style="text-decoration:none;">EDU</a>
-    <button class="nav-pill" id="langSwitch" onclick="toggleLang()">EN</button>
+    <a href="resume.html" class="nav-pill">Profile</a>
+    <a href="https://edu.techdou.com" target="_blank" class="nav-pill">EDU</a>
 </div>
 
 <!-- Background Decorations -->
-<div class="bg-decoration bg-circle"></div>
-<div class="bg-decoration bg-line"></div>
+<div class="bg-decoration bg-line-v bg-line-v-1"></div>
+<div class="bg-decoration bg-line-v bg-line-v-2"></div>
 <div class="bg-decoration bg-dot bg-dot-1"></div>
 <div class="bg-decoration bg-dot bg-dot-2"></div>
-<div class="bg-decoration bg-geo"></div>
 
 <!-- Hero -->
-<section class="hero" id="hero">
-        <!-- Layer 1: Background scrolling text pattern -->
-        <div class="hero-pattern">
-            <div class="hero-pattern-row scroll-left">TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU</div>
-            <div class="hero-pattern-row scroll-right">豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄</div>
-            <div class="hero-pattern-row scroll-left">DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU</div>
-            <div class="hero-pattern-row scroll-right">豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄</div>
-            <div class="hero-pattern-row scroll-left">AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI</div>
-            <div class="hero-pattern-row scroll-right">智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体</div>
-        </div>
-
-        <!-- Layer 2: English text (default visible) -->
-        <div class="hero-text-layer">
-            <p class="hero-greeting">HELLO, I'M</p>
-            <h1 class="hero-main-text">DOU <span class="hero-accent">XIULU</span></h1>
-            <p class="hero-subtitle">Northeast Normal University · Computer Technology · M.Eng</p>
-        </div>
-
-        <!-- Layer 3: Spotlight with Chinese content -->
-        <div class="hero-spotlight" id="heroSpotlight">
-            <div class="hero-spotlight-bg"></div>
-            <div class="hero-spotlight-pattern">
-                <div class="hero-pattern-row scroll-left">TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU TECHDOU</div>
-                <div class="hero-pattern-row scroll-right">豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄</div>
-                <div class="hero-pattern-row scroll-left">DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU DOUXIULU</div>
-                <div class="hero-pattern-row scroll-right">豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄 豆秀禄</div>
-                <div class="hero-pattern-row scroll-left">AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI AGENT AI</div>
-                <div class="hero-pattern-row scroll-right">智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体 智能体</div>
-            </div>
-            <div class="hero-spotlight-text">
-                <p class="hero-greeting">你好，我是</p>
-                <h1 class="hero-main-text">豆<span class="hero-accent">秀禄</span></h1>
-                <p class="hero-subtitle">东北师范大学 · 计算机技术 · 硕士在读</p>
-            </div>
-        </div>
-
-        <!-- Custom cursor -->
-        <div class="hero-cursor" id="heroCursor"></div>
-
-        <!-- Bottom gradient fade -->
-        <div class="hero-fade"></div>
-
-        <!-- Mobile Chinese text (hidden on desktop) -->
-        <div class="hero-mobile-cn">
-            <p class="hero-greeting">你好，我是</p>
-            <h1 class="hero-main-text">豆<span class="hero-accent">秀禄</span></h1>
-            <p class="hero-subtitle">东北师范大学 · 计算机技术 · 硕士在读</p>
-        </div>
-
-</section>
-
-<!-- Profile Section -->
-<section class="profile-section">
+<header class="hero">
     <div class="container">
-        <div class="profile-grid">
-            <div class="profile-text reveal reveal-d1">
-                <span class="profile-label" data-i18n="profileLabel">AI Agent Engineer</span>
-                <h1 class="profile-name">豆秀禄</h1>
-                <p class="profile-name-en">Dou Xiulu</p>
-                <div class="profile-divider"></div>
-                <p class="profile-bio" data-i18n="profileBio">东北师范大学计算机技术硕士在读，专注 Agent 智能体工程与 AI 驱动的自动化系统构建。擅长将前沿 AI 技术转化为可落地的产品与教学方案。</p>
-                <div class="profile-links">
-                    <a href="https://github.com/douknowai" target="_blank" class="profile-link">
-                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                        GitHub
-                    </a>
-                    <a href="https://profile.techdou.com/resume" target="_blank" class="profile-link">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        Resume
-                    </a>
-                    <a href="#contact" class="profile-link">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                        联系我
-                    </a>
-                </div>
-            </div>
-            <div class="profile-photo-wrap reveal">
-                <img src="assets/photo.jpg" alt="豆秀禄" class="profile-photo">
-                <div class="profile-photo-frame"></div>
-            </div>
-        </div>
+        <h1 class="hero-title reveal">
+            <span class="word-cn">Projects</span>
+            <em>· Techdou</em>
+        </h1>
     </div>
-</section>
+</header>
 
-<!-- Core Domains -->
-<section class="section">
+<!-- Works (Table Style) -->
+<main class="works">
     <div class="container">
-        <div class="section-header reveal">
-            <span class="section-number">01</span>
-            <h2 class="section-title" data-i18n="domainsTitle">核心领域</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="domains-grid">
-            <div class="domain-card reveal">
-                <div class="domain-icon"><svg viewBox="0 0 32 32" fill="none" stroke="#c0785a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="10" r="3"/><circle cx="10" cy="18" r="2.5"/><circle cx="22" cy="18" r="2.5"/><circle cx="16" cy="24" r="2.5"/><line x1="16" y1="13" x2="10" y2="15.5"/><line x1="16" y1="13" x2="22" y2="15.5"/><line x1="10" y1="20.5" x2="16" y2="21.5"/><line x1="22" y1="20.5" x2="16" y2="21.5"/><line x1="14.5" y1="8" x2="17.5" y2="8"/></svg></div>
-                <h3 class="domain-title" data-i18n="domain0">Agent 智能体工程</h3>
-                <p class="domain-desc" data-i18n="domainDesc0">专注于 Agentic Engineering 落地，擅长利用 MCP 协议/Skills 技能与多模态模型构建复杂业务流。</p>
-            </div>
-            <div class="domain-card reveal reveal-d1">
-                <div class="domain-icon"><svg viewBox="0 0 32 32" fill="none" stroke="#b8976a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11,10 6,16 11,22"/><polyline points="21,10 26,16 21,22"/><line x1="18" y1="8" x2="14" y2="24"/></svg></div>
-                <h3 class="domain-title" data-i18n="domain1">新一代开发范式</h3>
-                <p class="domain-desc" data-i18n="domainDesc1">深度实践 Vibe Coding 与 Spec Coding，实现从自然语言到交互级产品的快速原型交付。</p>
-            </div>
-            <div class="domain-card reveal reveal-d2">
-                <div class="domain-icon"><svg viewBox="0 0 32 32" fill="none" stroke="#6b8ca0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 18a8 8 0 11-16 0"/><path d="M8 14a8 8 0 1116 0"/><polyline points="22,14 24,18 20,18"/><polyline points="10,18 8,14 12,14"/></svg></div>
-                <h3 class="domain-title" data-i18n="domain2">自动化 SOP 构建</h3>
-                <p class="domain-desc" data-i18n="domainDesc2">擅长将传统办公与科研任务转化为 AI 驱动的自动化流水线，具备实际的系统管理与运维经验。</p>
-            </div>
-            <div class="domain-card reveal reveal-d3">
-                <div class="domain-icon"><svg viewBox="0 0 32 32" fill="none" stroke="#c0785a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6c-3 0-5 2-5 5v4c0 2-1 3-3 4"/><path d="M16 6c3 0 5 2 5 5v4c0 2 1 3 3 4"/><path d="M8 19c-2 1-3 3-3 5"/><path d="M24 19c2 1 3 3 3 5"/><path d="M11 24c0 2-1 3-2 4"/><path d="M21 24c0 2 1 3 2 4"/><circle cx="16" cy="14" r="2"/><line x1="16" y1="16" x2="16" y2="22"/><path d="M13 22h6"/></svg></div>
-                <h3 class="domain-title" data-i18n="domain3">龙虾豆 — AI 助手</h3>
-                <p class="domain-desc" data-i18n="domainDesc3">基于 OpenClaw 框架搭建的个人 AI 助手，代号「龙虾豆」。覆盖多渠道交互（飞书/微信）、语音合成与识别、图片/视频/音乐生成、浏览器自动化等能力。不只是工具，更是持续进化的数字伙伴。</p>
-            </div>
-        </div>
-    </div>
-</section>
+        <div class="work-table">
 
-<!-- Tech Background -->
-<section class="section">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-number">02</span>
-            <h2 class="section-title" data-i18n="techTitle">技术背景</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="tech-list">
-            <div class="tech-item reveal">
-                <div class="tech-marker tech-marker-1"><svg viewBox="0 0 24 24" fill="none" stroke="#c0785a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3L2 9l10 6 10-6-10-6z"/><path d="M2 9v6"/><path d="M12 15v6"/><path d="M7 17.5l5 3 5-3"/><path d="M22 9v6"/></svg></div>
-                <div>
-                    <div class="tech-title" data-i18n="tech0">学术背景</div>
-                    <div class="tech-desc" data-i18n="techDesc0">东北师范大学计算机技术硕士在读，具备扎实的计算机软件设计基础。</div>
+            <!-- 01 TechDaily -->
+            <a href="https://news.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-1">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M5 50 Q 20 50, 25 50 T 40 50"/>
+                            <path d="M40 50 L 44 30 L 50 70 L 56 40 L 60 50"/>
+                            <path d="M60 50 Q 72 50, 78 50 T 95 50"/>
+                        </svg>
+                    </div>
                 </div>
-            </div>
-            <div class="tech-item reveal reveal-d1">
-                <div class="tech-marker tech-marker-2"><svg viewBox="0 0 24 24" fill="none" stroke="#b8976a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 8l10 6 10-6-10-6z"/><path d="M2 14l10 6 10-6"/><path d="M2 20l10 6 10-6"/></svg></div>
-                <div>
-                    <div class="tech-title" data-i18n="tech1">项目成果</div>
-                    <div class="tech-desc" data-i18n="techDesc1">自主开发运营多项 AI 应用，涵盖 RAG 知识库、自动化资讯系统、讲义转录等实操项目。</div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">01</span>
+                        <span class="work-tag">Daily Intelligence</span>
+                        <span class="work-domain">news.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">TechDaily <span class="work-title-en">每日科技快报</span></h2>
+                    <p class="work-desc">AI 驱动的日报引擎。每日自动 RSS、摘要、播报，从信息洪流中提炼当日要闻。不 FOMO 要 JOMO，只留存值得回看的那几条。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">RSS</span>
+                        <span class="stack-chip">LLM Summary</span>
+                        <span class="stack-chip">TTS 播报</span>
+                        <span class="stack-chip">Cron</span>
+                    </div>
                 </div>
-            </div>
-            <div class="tech-item reveal reveal-d2">
-                <div class="tech-marker tech-marker-3"><svg viewBox="0 0 24 24" fill="none" stroke="#6b8ca0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18,6 12,12 9,9 3,15"/><polyline points="15,6 18,6 18,9"/><line x1="3" y1="21" x2="21" y2="21"/></svg></div>
-                <div>
-                    <div class="tech-title" data-i18n="tech2">技术进修</div>
-                    <div class="tech-desc" data-i18n="techDesc2">长期跟踪北京一线前沿 AI 教培机构技术动态，保持开发思路与工业界同步。</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Training Experience -->
-<section class="section">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-number">03</span>
-            <h2 class="section-title" data-i18n="trainingTitle">实训经验</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="training-card reveal">
-            <div class="training-icon-wrap"><svg viewBox="0 0 40 40" fill="none" stroke="#c0785a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="20" width="24" height="14" rx="2"/><path d="M12 20V14h16v6"/><circle cx="20" cy="10" r="3"/><path d="M8 26h24M8 30h16"/></svg></div>
-            <div>
-                <p class="training-text" data-i18n="trainingText">
-                    曾在多所院校<strong>主讲 Python 程序设计与 AI Agent 开发实训</strong>，具备成熟的通识教育授课与教案编排能力。
-                </p>
-                <div class="training-schools">
-                    <span class="school-tag" data-i18n="school0">临沂大学</span>
-                    <span class="school-tag" data-i18n="school1">山东理工大学</span>
-                    <span class="school-tag" data-i18n="school2">青岛航空科技职业学院</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact -->
-<section class="section" id="contact">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-number">04</span>
-            <h2 class="section-title" data-i18n="contactLabel">联系方式</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="contact-grid">
-            <a href="https://github.com/douknowai" target="_blank" class="contact-card reveal">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                <span class="contact-label">GitHub</span>
-                <span class="contact-value">@douknowai</span>
             </a>
-            <div class="contact-card reveal reveal-d1">
-                <img src="assets/wechat.jpg" alt="微信二维码" class="wechat-qr">
-                <span class="contact-label">微信</span>
-                <span class="contact-value">扫码添加</span>
+
+            <!-- 02 Profile -->
+            <a href="https://profile.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-2">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="36" r="14"/>
+                            <path d="M26 82 Q 26 58, 50 58 Q 74 58, 74 82"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">02</span>
+                        <span class="work-tag">Self Portrait</span>
+                        <span class="work-domain">profile.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">Profile <span class="work-title-en">个人简历</span></h2>
+                    <p class="work-desc">一份关于「我为什么做教育」的回答。从课程实验到系统架构，从学习实践到线上服务——把路径写清楚，把选择讲明白。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">Editorial Design</span>
+                        <span class="stack-chip">i18n</span>
+                        <span class="stack-chip">Vanilla JS</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 03 EduManager -->
+            <a href="https://edu.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-3">
+                        <svg viewBox="0 0 100 100">
+                            <rect x="24" y="30" width="52" height="14" rx="2"/>
+                            <rect x="24" y="50" width="52" height="14" rx="2"/>
+                            <rect x="24" y="70" width="52" height="10" rx="2"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">03</span>
+                        <span class="work-tag">Engineering</span>
+                        <span class="work-domain">edu.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">EduManager <span class="work-title-en">教学讲义管理平台</span></h2>
+                    <p class="work-desc">面向高校教师的讲义托管与更新系统。Nginx 反代、PM2 守护、HTTPS 全链路——小工具的背后是完整的工程能力。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">Nginx</span>
+                        <span class="stack-chip">PM2</span>
+                        <span class="stack-chip">HTTPS</span>
+                        <span class="stack-chip">Node.js</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 04 Dual Universe -->
+            <a href="https://love.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-4">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="40" cy="50" r="22"/>
+                            <circle cx="60" cy="50" r="22"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">04</span>
+                        <span class="work-tag">For Someone</span>
+                        <span class="work-domain">love.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">Dual Universe <span class="work-title-en">双生宇宙</span></h2>
+                    <p class="work-desc">写给重要的人的纪念日页面。Docker 容器化部署，前后端分离架构——技术是载体，情感是内核。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">Docker</span>
+                        <span class="stack-chip">前后端分离</span>
+                        <span class="stack-chip">Animation</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 05 Tokens -->
+            <a href="https://tokens.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-5">
+                        <svg viewBox="0 0 100 100">
+                            <line x1="20" y1="80" x2="20" y2="58"/>
+                            <line x1="38" y1="80" x2="38" y2="44"/>
+                            <line x1="56" y1="80" x2="56" y2="32"/>
+                            <line x1="74" y1="80" x2="74" y2="50"/>
+                            <line x1="18" y1="80" x2="82" y2="80"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">05</span>
+                        <span class="work-tag">Built for Myself</span>
+                        <span class="work-domain">tokens.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">Tokens <span class="work-title-en">API 用量看板</span></h2>
+                    <p class="work-desc">聚合 DeepSeek、智谱、Kimi、MiniMax 四家国产大模型的实时额度监控。定时刷新、阈值告警、趋势可视化——自用工具，解决自己的问题。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">DeepSeek</span>
+                        <span class="stack-chip">智谱</span>
+                        <span class="stack-chip">Kimi</span>
+                        <span class="stack-chip">MiniMax</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 06 LifeTime -->
+            <a href="https://blog.techdou.com" target="_blank" class="work-row reveal">
+                <div class="work-icon-cell">
+                    <div class="work-icon icon-6">
+                        <svg viewBox="0 0 100 100">
+                            <path d="M50 26 Q 30 26, 30 44 Q 30 70, 50 78 Q 70 70, 70 44 Q 70 26, 50 26 Z"/>
+                            <line x1="50" y1="38" x2="50" y2="64"/>
+                            <line x1="40" y1="50" x2="60" y2="50"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="work-content">
+                    <div class="work-head">
+                        <span class="work-num">06</span>
+                        <span class="work-tag">A Quiet Place</span>
+                        <span class="work-domain">blog.techdou.com
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        </span>
+                    </div>
+                    <h2 class="work-title">LifeTime <span class="work-title-en">博客</span></h2>
+                    <p class="work-desc">一个写给自己的地方。技术思考、工程复盘、读书笔记。不追 SEO，不蹭热点——写得慢，但写得真。</p>
+                    <div class="work-stack">
+                        <span class="stack-chip">Writing</span>
+                        <span class="stack-chip">工程复盘</span>
+                        <span class="stack-chip">读书笔记</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</main>
+
+<!-- Timeline -->
+<section class="timeline-section">
+    <div class="container">
+        <p class="section-label reveal">The Arc</p>
+        <h2 class="timeline-title reveal">一条还在延伸的线</h2>
+        <p class="timeline-sub reveal reveal-d1">不是履历，是节奏。从写下第一行代码，到让想法长成服务。</p>
+        <div class="timeline">
+            <div class="tl-node reveal">
+                <div class="tl-year">2021</div>
+                <p class="tl-text">写下第一行代码。从「能用」开始，学会把问题拆小。</p>
+            </div>
+            <div class="tl-node reveal reveal-d1">
+                <div class="tl-year">2023</div>
+                <p class="tl-text">走进 AI。第一次让模型替自己干活，从此回不去了。</p>
+            </div>
+            <div class="tl-node reveal reveal-d2">
+                <div class="tl-year">2026</div>
+                <p class="tl-text">开始自研上线。一个域名，一台服务器，把想法变成可访问的服务。</p>
+            </div>
+            <div class="tl-node reveal reveal-d2">
+                <div class="tl-year">Now</div>
+                <p class="tl-text">持续构建中。技术、教育、表达——三条线，同一个内核。</p>
             </div>
         </div>
     </div>
@@ -851,157 +637,104 @@
 <!-- Footer -->
 <footer class="footer">
     <div class="container">
-        <p class="footer-text reveal" data-i18n="footerQuote">"Build with AI, Teach with passion."</p>
+        <p class="footer-quote reveal">"Build with rigor. Write with soul."</p>
         <div class="footer-geo reveal">
-            <span class="circle"></span>
+            <span class="dot"></span>
             <span class="line"></span>
-            <span class="circle"></span>
+            <span class="dot"></span>
             <span class="line"></span>
-            <span class="circle"></span>
+            <span class="dot"></span>
         </div>
+        <p class="footer-copy">© 2026 techdou.com</p>
     </div>
 </footer>
 
-<!-- Spotlight Effect -->
+<!-- Reveal Animation -->
 <script>
-    const hero = document.getElementById('hero');
-    const spotlight = document.getElementById('heroSpotlight');
-    const cursor = document.getElementById('heroCursor');
-    let isHovering = false;
-
-    function updateSpotlight(x, y) {
-        if (!hero || !spotlight) return;
-        const rect = hero.getBoundingClientRect();
-        const localX = x - rect.left;
-        const localY = y - rect.top;
-        spotlight.style.clipPath = `circle(180px at ${localX}px ${localY}px)`;
-        if (cursor) {
-            cursor.style.left = (x - 6) + 'px';
-            cursor.style.top = (y - 6) + 'px';
-        }
-    }
-
-    function showSpotlight() {
-        isHovering = true;
-        if (cursor) cursor.style.opacity = '1';
-    }
-
-    function hideSpotlight() {
-        isHovering = false;
-        if (cursor) cursor.style.opacity = '0';
-        if (spotlight) spotlight.style.clipPath = 'circle(0px at -1000px -1000px)';
-    }
-
-    if (hero) {
-        // Mouse
-        hero.addEventListener('mousemove', (e) => updateSpotlight(e.clientX, e.clientY));
-        hero.addEventListener('mouseenter', showSpotlight);
-        hero.addEventListener('mouseleave', hideSpotlight);
-        
-        // Touch
-        hero.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            showSpotlight();
-            const touch = e.touches[0];
-            updateSpotlight(touch.clientX, touch.clientY);
-        }, { passive: false });
-        
-        hero.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            updateSpotlight(touch.clientX, touch.clientY);
-        }, { passive: false });
-        
-        hero.addEventListener('touchend', hideSpotlight);
-    }
-
-    // Scroll Reveal
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
-<!-- i18n -->
+<!-- DouknowAI Pet (iframe, click-through except on pet) -->
+<iframe id="petFrame" src="./pet/pet.html" title="豆懂AI宠物" loading="lazy"></iframe>
 <script>
-const i18n = {
-    zh: {
-        profileLabel: 'AI Agent Engineer',
-        profileBio: '东北师范大学计算机技术硕士在读，专注 Agent 智能体工程与 AI 驱动的自动化系统构建。擅长将前沿 AI 技术转化为可落地的产品与教学方案。',
-        domain0: 'Agent 智能体工程',
-        domain1: '新一代开发范式',
-        domain2: '自动化 SOP 构建',
-        domain3: '龙虾豆 — AI 助手',
-        domainDesc0: '专注于 Agentic Engineering 落地，擅长利用 MCP 协议/Skills 技能与多模态模型构建复杂业务流。',
-        domainDesc1: '深度实践 Vibe Coding 与 Spec Coding，实现从自然语言到交互级产品的快速原型交付。',
-        domainDesc2: '擅长将传统办公与科研任务转化为 AI 驱动的自动化流水线，具备实际的系统管理与运维经验。',
-        domainDesc3: '基于 OpenClaw 框架搭建的个人 AI 助手，代号「龙虾豆」。覆盖多渠道交互（飞书/微信）、语音合成与识别、图片/视频/音乐生成、浏览器自动化等能力。不只是工具，更是持续进化的数字伙伴。',
-        tech0: '学术背景',
-        tech1: '项目成果',
-        tech2: '技术进修',
-        techDesc0: '东北师范大学计算机技术硕士在读，具备扎实的计算机软件设计基础。',
-        techDesc1: '自主开发运营多项 AI 应用，涵盖 RAG 知识库、自动化资讯系统、讲义转录等实操项目。',
-        techDesc2: '长期跟踪北京一线前沿 AI 教培机构技术动态，保持开发思路与工业界同步。',
-        trainingText: '曾在多所院校主讲 Python 程序设计与 AI Agent 开发实训，具备成熟的通识教育授课与教案编排能力。',
-        school0: '临沂大学',
-        school1: '山东理工大学',
-        school2: '青岛航空科技职业学院',
-        domainsTitle: '核心领域',
-        techTitle: '技术背景',
-        trainingTitle: '实训经验',
-        contactLabel: '联系方式',
-        footerQuote: '"Build with AI, Teach with passion."'
-    },
-    en: {
-        profileLabel: 'AI Agent Engineer',
-        profileBio: 'M.Eng student in Computer Technology at Northeast Normal University. Focused on Agent Engineering and AI-driven automation systems. Skilled at translating cutting-edge AI into practical products and teaching solutions.',
-        domain0: 'Agent Engineering',
-        domain1: 'Modern Development',
-        domain2: 'Automation SOP',
-        domain3: 'LobsterDou — AI Assistant',
-        domainDesc0: 'Specializing in Agentic Engineering with MCP protocols, Skills, and multimodal models for complex workflows.',
-        domainDesc1: 'Deep practitioner of Vibe Coding and Spec Coding, rapidly prototyping from natural language to interactive products.',
-        domainDesc2: 'Expert at converting traditional office and research tasks into AI-driven automation pipelines.',
-        domainDesc3: 'Personal AI assistant built on OpenClaw framework. Covers multi-channel interaction (Feishu/WeChat), voice, image/video/music generation, browser automation. Not just a tool, but an evolving digital companion.',
-        tech0: 'Academic',
-        tech1: 'Projects',
-        tech2: 'Trend Tracking',
-        techDesc0: 'M.Eng student at Northeast Normal University with solid foundations in computer software design.',
-        techDesc1: 'Independently developed and operated multiple AI applications including RAG knowledge base, automated news systems, lecture transcription.',
-        techDesc2: 'Tracks cutting-edge AI education trends from Beijing, keeping development thinking aligned with industry.',
-        trainingText: 'Delivered Python programming and AI Agent development training at multiple universities with mature curriculum design capabilities.',
-        school0: 'Linyi University',
-        school1: 'Shandong University of Technology',
-        school2: 'Qingdao Aviation Tech College',
-        domainsTitle: 'Core Domains',
-        techTitle: 'Tech Background',
-        trainingTitle: 'Training Experience',
-        contactLabel: 'Contact',
-        footerQuote: '"Build with AI, Teach with passion."'
+(function () {
+    const PET_SOURCE = 'techdaily-parent';
+    const petFrame = document.getElementById('petFrame');
+
+    // iframe 默认全屏 + 鼠标穿透，仅当宠物处于命中区时接管拖拽
+    let hitBounds = null;
+    let dragging = false;
+
+    function pointerInBounds(x, y) {
+        if (!hitBounds) return false;
+        return x >= hitBounds.left && x <= hitBounds.right &&
+               y >= hitBounds.top && y <= hitBounds.bottom;
     }
-};
 
-let currentLang = 'zh';
+    // 将鼠标坐标传给 iframe（始终跟随，用于 flee 行为）
+    window.addEventListener('pointermove', (e) => {
+        petFrame.contentWindow.postMessage({
+            source: PET_SOURCE,
+            type: 'douknow-pet-pointer',
+            x: e.clientX,
+            y: e.clientY
+        }, '*');
+    }, { passive: true });
 
-function toggleLang() {
-    currentLang = currentLang === 'zh' ? 'en' : 'zh';
-    document.getElementById('langSwitch').textContent = currentLang === 'zh' ? 'EN' : '中';
-    applyLang(currentLang);
-}
-
-function applyLang(lang) {
-    const t = i18n[lang];
-    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key]) el.textContent = t[key];
+    // 拖拽：仅在命中宠物时启动，并临时关闭 iframe 穿透以捕获后续事件
+    window.addEventListener('pointerdown', (e) => {
+        if (!pointerInBounds(e.clientX, e.clientY)) return;
+        dragging = true;
+        petFrame.style.pointerEvents = 'auto';
+        petFrame.contentWindow.postMessage({
+            source: PET_SOURCE,
+            type: 'douknow-pet-drag-start',
+            x: e.clientX,
+            y: e.clientY
+        }, '*');
+        e.preventDefault();
     });
-}
+
+    window.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        petFrame.contentWindow.postMessage({
+            source: PET_SOURCE,
+            type: 'douknow-pet-drag-move',
+            x: e.clientX,
+            y: e.clientY
+        }, '*');
+    });
+
+    const endDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        petFrame.style.pointerEvents = '';
+        petFrame.contentWindow.postMessage({
+            source: PET_SOURCE,
+            type: 'douknow-pet-drag-end'
+        }, '*');
+    };
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+
+    // 接收 iframe 上报的宠物命中区，用于决定何时接管指针
+    window.addEventListener('message', (event) => {
+        const data = event.data || {};
+        if (!data || data.source !== 'douknow-pet') return;
+        if (data.type === 'douknow-pet-bounds' && data.bounds) {
+            hitBounds = data.bounds;
+        }
+    });
+})();
 </script>
 
 </body>
