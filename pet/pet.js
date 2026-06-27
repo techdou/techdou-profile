@@ -58,16 +58,16 @@ const PET_CONFIG = {
     'Build with rigor, write with soul.'
   ],
   frames: {
-    idle: './assets/douknow/idle.png',
-    idleWink: './assets/douknow/idle-wink.png',
-    walkFront1: './assets/douknow/walk-front-1.png',
-    walkFront2: './assets/douknow/walk-front-2.png',
-    walkLeft: './assets/douknow/walk-left-1.png',
-    // 原 walk-right-1.png 实际仍偏左，会产生“倒退感”。这里使用镜像修正版。
-    walkRight: './assets/douknow/walk-right-fixed.png',
-    walkBack: './assets/douknow/walk-back-1.png',
-    sleep: './assets/douknow/sleep.png',
-    cloud: './assets/douknow/jindou-cloud.png'
+    idle: './assets/douknow/idle.webp',
+    idleWink: './assets/douknow/idle-wink.webp',
+    walkFront1: './assets/douknow/walk-front-1.webp',
+    walkFront2: './assets/douknow/walk-front-2.webp',
+    walkLeft: './assets/douknow/walk-left-1.webp',
+    // 原 walk-right-1.webp 实际仍偏左，会产生“倒退感”。这里使用镜像修正版。
+    walkRight: './assets/douknow/walk-right-fixed.webp',
+    walkBack: './assets/douknow/walk-back-1.webp',
+    sleep: './assets/douknow/sleep.webp',
+    cloud: './assets/douknow/jindou-cloud.webp'
   }
 };
 
