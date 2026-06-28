@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects · Techdou</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="apple-touch-icon" href="assets/logo.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=Work+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -36,6 +38,39 @@
         }
 
         /* === TOP NAV === */
+        .brand {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            display: grid;
+            place-items: center;
+            color: var(--accent-terracotta);
+            transition: all 0.3s var(--ease);
+        }
+        .brand-mark svg { width: 22px; height: 22px; }
+        .brand-name {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .brand:hover .brand-mark {
+            border-color: var(--accent-terracotta);
+            transform: translateY(-1px);
+        }
         .top-nav {
             position: fixed;
             top: 20px;
@@ -371,6 +406,20 @@
 <body>
 
 <!-- Top Nav -->
+<a href="index.html" class="brand" aria-label="Techdou home">
+    <span class="brand-mark">
+        <svg viewBox="0 0 100 100" aria-hidden="true" fill="currentColor">
+            <g transform="translate(6 0)">
+                <path d="M16 26 H64 V34 H16 Z"/>
+                <path d="M37 26 L45 26 L43 72 L35 72 Z"/>
+                <path d="M60 22 L68 22 L64 74 L56 74 Z"/>
+                <path d="M60 44 Q44 44 44 58 Q44 72 58 72 Q68 72 68 62 L68 56 Q68 44 60 44 Z"/>
+                <circle cx="59" cy="58" r="7.5" fill="#fff"/>
+            </g>
+        </svg>
+    </span>
+    <span class="brand-name">Techdou</span>
+</a>
 <div class="top-nav">
     <a href="resume.html" class="nav-pill">Profile</a>
     <a href="https://edu.techdou.com" target="_blank" class="nav-pill">EDU</a>
@@ -634,14 +683,16 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
-<!-- DouknowAI Pet (iframe, click-through except on pet) -->
+<!-- DouknowAI Pet (iframe, permanently click-through; drag driven by postMessage) -->
 <iframe id="petFrame" src="./pet/pet.html" title="豆懂AI宠物" loading="lazy"></iframe>
 <script>
 (function () {
     const PET_SOURCE = 'techdaily-parent';
     const petFrame = document.getElementById('petFrame');
 
-    // iframe 默认全屏 + 鼠标穿透，仅当宠物处于命中区时接管拖拽
+    // 关键：iframe 全程保持 pointer-events: none（CSS 已设置），
+    // 这样所有指针事件始终落在父页面 window 上，pointerup 必然能收到，
+    // iframe 永远不会拦截页面的链接/按钮点击。拖拽完全靠 postMessage 驱动。
     let hitBounds = null;
     let dragging = false;
 
@@ -653,19 +704,29 @@
 
     // 将鼠标坐标传给 iframe（始终跟随，用于 flee 行为）
     window.addEventListener('pointermove', (e) => {
-        petFrame.contentWindow.postMessage({
-            source: PET_SOURCE,
-            type: 'douknow-pet-pointer',
-            x: e.clientX,
-            y: e.clientY
-        }, '*');
+        if (dragging) {
+            petFrame.contentWindow.postMessage({
+                source: PET_SOURCE,
+                type: 'douknow-pet-drag-move',
+                x: e.clientX,
+                y: e.clientY
+            }, '*');
+        } else {
+            petFrame.contentWindow.postMessage({
+                source: PET_SOURCE,
+                type: 'douknow-pet-pointer',
+                x: e.clientX,
+                y: e.clientY
+            }, '*');
+        }
     }, { passive: true });
 
-    // 拖拽：仅在命中宠物时启动，并临时关闭 iframe 穿透以捕获后续事件
+    // 拖拽：仅在命中宠物时启动。不再翻转 iframe 的 pointer-events，
+    // pointerup 始终由父页面 window 接收，不会出现"拖完就点不动页面"。
     window.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return; // 只响应主键
         if (!pointerInBounds(e.clientX, e.clientY)) return;
         dragging = true;
-        petFrame.style.pointerEvents = 'auto';
         petFrame.contentWindow.postMessage({
             source: PET_SOURCE,
             type: 'douknow-pet-drag-start',
@@ -675,20 +736,9 @@
         e.preventDefault();
     });
 
-    window.addEventListener('pointermove', (e) => {
-        if (!dragging) return;
-        petFrame.contentWindow.postMessage({
-            source: PET_SOURCE,
-            type: 'douknow-pet-drag-move',
-            x: e.clientX,
-            y: e.clientY
-        }, '*');
-    });
-
     const endDrag = () => {
         if (!dragging) return;
         dragging = false;
-        petFrame.style.pointerEvents = '';
         petFrame.contentWindow.postMessage({
             source: PET_SOURCE,
             type: 'douknow-pet-drag-end'
@@ -696,8 +746,14 @@
     };
     window.addEventListener('pointerup', endDrag);
     window.addEventListener('pointercancel', endDrag);
+    // 兜底：窗口失焦 / 切到后台时也释放拖拽，避免 dragging 卡死
+    window.addEventListener('blur', endDrag);
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) endDrag();
+    });
 
-    // 接收 iframe 上报的宠物命中区，用于决定何时接管指针
+    // 接收 iframe 上报的宠物命中区，用于决定何时接管指针；
+    // 命中区附近给个 grab/grabbing 手型反馈（仍不拦截点击）
     window.addEventListener('message', (event) => {
         const data = event.data || {};
         if (!data || data.source !== 'douknow-pet') return;
@@ -705,6 +761,17 @@
             hitBounds = data.bounds;
         }
     });
+
+    // hover 在宠物身上时显示抓手手型
+    window.addEventListener('pointermove', (e) => {
+        if (dragging) {
+            document.body.style.cursor = 'grabbing';
+        } else if (pointerInBounds(e.clientX, e.clientY)) {
+            document.body.style.cursor = 'grab';
+        } else {
+            document.body.style.cursor = '';
+        }
+    }, { passive: true });
 })();
 </script>
 

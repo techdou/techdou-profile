@@ -62,9 +62,8 @@ const PET_CONFIG = {
     idleWink: './assets/douknow/idle-wink.webp',
     walkFront1: './assets/douknow/walk-front-1.webp',
     walkFront2: './assets/douknow/walk-front-2.webp',
-    walkLeft: './assets/douknow/walk-left-1.webp',
-    // 原 walk-right-1.webp 实际仍偏左，会产生“倒退感”。这里使用镜像修正版。
-    walkRight: './assets/douknow/walk-right-fixed.webp',
+    walkLeft: './assets/douknow/walk-left.webp',
+    walkRight: './assets/douknow/walk-right.webp',
     walkBack: './assets/douknow/walk-back-1.webp',
     sleep: './assets/douknow/sleep.webp',
     cloud: './assets/douknow/jindou-cloud.webp'

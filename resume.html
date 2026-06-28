@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>豆秀禄 | AI Agent Engineer</title>
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="apple-touch-icon" href="assets/logo.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=Work+Sans:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -557,6 +559,40 @@
             display: none;
         }
 
+        .brand {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        .brand-mark {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border-color);
+            display: grid;
+            place-items: center;
+            color: var(--accent-terracotta);
+            transition: all 0.3s var(--ease);
+        }
+        .brand-mark svg { width: 20px; height: 20px; }
+        .brand-name {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        .brand:hover .brand-mark {
+            border-color: var(--accent-terracotta);
+            transform: translateY(-1px);
+        }
+
         .top-nav {
             position: fixed;
             top: 20px;
@@ -606,6 +642,20 @@
 <body>
 
 <!-- Top Navigation -->
+<a href="index.html" class="brand" aria-label="Techdou home">
+    <span class="brand-mark">
+        <svg viewBox="0 0 100 100" aria-hidden="true" fill="currentColor">
+            <g transform="translate(6 0)">
+                <path d="M16 26 H64 V34 H16 Z"/>
+                <path d="M37 26 L45 26 L43 72 L35 72 Z"/>
+                <path d="M60 22 L68 22 L64 74 L56 74 Z"/>
+                <path d="M60 44 Q44 44 44 58 Q44 72 58 72 Q68 72 68 62 L68 56 Q68 44 60 44 Z"/>
+                <circle cx="59" cy="58" r="7.5" fill="#fff"/>
+            </g>
+        </svg>
+    </span>
+    <span class="brand-name">Techdou</span>
+</a>
 <div class="top-nav">
     <a href="index.html" class="nav-pill" style="text-decoration:none;">Home</a>
     <a href="https://edu.techdou.com" target="_blank" class="nav-pill" style="text-decoration:none;">EDU</a>
