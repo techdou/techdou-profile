@@ -12,17 +12,13 @@
  */
 
 const PET_CONFIG = {
-  petCountDesktop: 1,
-  petCountMobile: 1,
   mobileBreakpoint: 768,
   baseSize: 88,
-  sizeRange: [1, 1],
   baseSpeed: 0.72,
   maxSpeed: 2.6,
   dragThrowScale: 0.22,
   friction: 0.992,
   boundaryRestitution: 0.78,
-  speedRange: [0.85, 1.15],
   stateDurationRange: [2800, 7600],
   fleeRadius: 92,
   fleeMultiplier: 2.7,
@@ -43,31 +39,78 @@ const PET_CONFIG = {
   talkFadeMs: 360,
   talkFont: 15,
   talkMaxWidthRatio: 2.8,
-  quotes: [
-    '把每一个想法，做成能运行的东西。',
-    '技术是骨架，人文是温度。',
-    '不 FOMO，要 JOMO。',
-    '写得慢，但写得真。',
-    '克制地构建，认真地表达。',
-    '从一行代码，到一台服务器。',
-    '把路径写清楚，把选择讲明白。',
-    '小工具的背后，是完整的工程能力。',
-    '走得慢的人，不回头。',
-    '先用起来，再谈完美。',
-    '解决问题，比追新技术更值得。',
-    'Build with rigor, write with soul.'
-  ],
-  frames: {
-    idle: './assets/douknow/idle.webp',
-    idleWink: './assets/douknow/idle-wink.webp',
-    walkFront1: './assets/douknow/walk-front-1.webp',
-    walkFront2: './assets/douknow/walk-front-2.webp',
-    walkLeft: './assets/douknow/walk-left.webp',
-    walkRight: './assets/douknow/walk-right.webp',
-    walkBack: './assets/douknow/walk-back-1.webp',
-    sleep: './assets/douknow/sleep.webp',
-    cloud: './assets/douknow/jindou-cloud.webp'
-  }
+  // 双宠物皮肤：绿色科技豆（techdou.com）+ 橙色豆懂AI（douknowai）
+  skins: [
+    {
+      id: 'techdou',
+      name: '科技豆',
+      startXRatio: 0.26,
+      quotes: [
+        '日拱一卒，功不唐捐。',
+        '写清楚，比写漂亮重要。',
+        '好的代码，读起来像散文。',
+        '简单，是删出来的。',
+        '先把东西做出来，再谈好不好。',
+        '慢一点，反而快。',
+        '记录，是给未来的自己写信。',
+        '工具的意义，是让思考更专注。',
+        '把复杂留给自己，把简单留给别人。',
+        '长期主义，就是每天做一点。',
+        '把手头这件小事做完整。',
+        '克制，是一种技术审美。',
+        '今日宜：修一个小 bug。',
+        '保持好奇，保持耐心。',
+        '技术是手段，生活才是目的。'
+      ],
+      frames: {
+        idle: './assets/techdou/idle.webp',
+        idleWink: './assets/techdou/idle-wink.webp',
+        walkFront1: './assets/techdou/walk-front-1.webp',
+        walkFront2: './assets/techdou/walk-front-2.webp',
+        walkLeft: './assets/techdou/walk-left.webp',
+        walkRight: './assets/techdou/walk-right.webp',
+        walkBack: './assets/techdou/walk-back-1.webp',
+        sleep: './assets/techdou/sleep.webp',
+        cloud: './assets/techdou/jindou-cloud.webp'
+      }
+    },
+    {
+      id: 'douknow',
+      name: '豆懂AI',
+      startXRatio: 0.74,
+      quotes: [
+        '知之为知之，不知为不知。',
+        '听懂问题，比给出答案更难。',
+        '好的回答，从好的提问开始。',
+        '学问，是学着问。',
+        '把书读薄，把事想透。',
+        '答案会过时，思考不会。',
+        '你慢慢问，我认真答。',
+        '一词一句，皆有来处。',
+        '授人以鱼，不如授人以渔。',
+        '温故而知新。',
+        '把复杂的讲简单，是本事。',
+        '理解，是最温柔的能力。',
+        '今天也想明白一件小事。',
+        '三人行，必有我师。'
+      ],
+      // 底座（水果盘）相对尺寸/位置微调，缺省回退到全局云朵参数
+      cloudScaleW: 1.5,
+      cloudScaleH: 0.71,
+      cloudOffsetY: 0.2,
+      frames: {
+        idle: './assets/douknow/idle.webp',
+        idleWink: './assets/douknow/idle-wink.webp',
+        walkFront1: './assets/douknow/walk-front-1.webp',
+        walkFront2: './assets/douknow/walk-front-2.webp',
+        walkLeft: './assets/douknow/walk-left.webp',
+        walkRight: './assets/douknow/walk-right.webp',
+        walkBack: './assets/douknow/walk-back-1.webp',
+        sleep: './assets/douknow/sleep.webp',
+        cloud: './assets/douknow/fruit-plate.webp'
+      }
+    }
+  ]
 };
 
 function randomRange(min, max) {
@@ -120,9 +163,11 @@ const PetState = {
 };
 
 class DouknowPet {
-  constructor(ctx, images, opts = {}, canvasWidth, canvasHeight) {
+  constructor(ctx, skin, images, opts = {}, canvasWidth, canvasHeight) {
     this.ctx = ctx;
+    this.skin = skin;
     this.images = images;
+    this.quotes = skin.quotes || [];
     this.canvasW = canvasWidth;
     this.canvasH = canvasHeight;
     this.bounds = { left: 0, top: 0, width: canvasWidth, height: canvasHeight };
@@ -364,7 +409,7 @@ class DouknowPet {
   }
 
   sayRandomQuote() {
-    const list = PET_CONFIG.quotes;
+    const list = this.quotes;
     if (!list || list.length === 0) return;
     const next = list[Math.floor(Math.random() * list.length)];
     if (next === this.talkText && list.length > 1) {
@@ -506,10 +551,13 @@ class DouknowPet {
     ctx.save();
 
     const cloud = this.images.cloud;
-    const cloudW = this.size * (PET_CONFIG.cloudScaleW + Math.min(0.28, Math.abs(this.vx) * 0.04));
-    const cloudH = this.size * PET_CONFIG.cloudScaleH;
+    const scaleW = this.skin.cloudScaleW != null ? this.skin.cloudScaleW : PET_CONFIG.cloudScaleW;
+    const scaleH = this.skin.cloudScaleH != null ? this.skin.cloudScaleH : PET_CONFIG.cloudScaleH;
+    const offsetY = this.skin.cloudOffsetY != null ? this.skin.cloudOffsetY : PET_CONFIG.cloudOffsetY;
+    const cloudW = this.size * (scaleW + Math.min(0.28, Math.abs(this.vx) * 0.04));
+    const cloudH = this.size * scaleH;
     const cloudX = this.x - cloudW * 0.5;
-    const cloudY = this.y + this.size * PET_CONFIG.cloudOffsetY;
+    const cloudY = this.y + this.size * offsetY;
     if (cloud) {
       ctx.globalAlpha = this.isDragging ? 0.92 : 0.82;
       ctx.drawImage(cloud, cloudX, cloudY, cloudW, cloudH);
@@ -662,6 +710,7 @@ class PetParty {
     this.dpr = window.devicePixelRatio || 1;
     this.boundsPostTimer = 0;
     this.pendingSurfaceRect = null;
+    this.bridgeDragPet = null;
 
     this.init();
   }
@@ -680,7 +729,7 @@ class PetParty {
     this.lastTime = performance.now();
     this.rafId = requestAnimationFrame((t) => this.loop(t));
     this.postBounds();
-    console.log('[DouknowPet] 豆懂AI宠物系统已启动');
+    console.log('[DouknowPet] 科技豆 & 豆懂AI 双宠物系统已启动');
   }
 
   resizeCanvas() {
@@ -702,30 +751,31 @@ class PetParty {
   }
 
   async loadImages() {
-    const entries = Object.entries(PET_CONFIG.frames);
-    await Promise.all(entries.map(async ([key, src]) => {
-      this.images[key] = await loadImage(src);
+    this.skinImages = {};
+    await Promise.all(PET_CONFIG.skins.map(async (skin) => {
+      const images = {};
+      const entries = Object.entries(skin.frames);
+      await Promise.all(entries.map(async ([key, src]) => {
+        images[key] = await loadImage(src);
+      }));
+      this.skinImages[skin.id] = images;
     }));
     this.imagesLoaded = true;
   }
 
   createPets() {
-    const isMobile = window.innerWidth < PET_CONFIG.mobileBreakpoint;
-    const count = isMobile ? PET_CONFIG.petCountMobile : PET_CONFIG.petCountDesktop;
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    for (let i = 0; i < count; i++) {
-      const sizeScale = randomRange(PET_CONFIG.sizeRange[0], PET_CONFIG.sizeRange[1]);
-      const speedScale = randomRange(PET_CONFIG.speedRange[0], PET_CONFIG.speedRange[1]);
-      const pet = new DouknowPet(this.ctx, this.images, {
-        x: w * 0.22 + i * 24,
+    PET_CONFIG.skins.forEach((skin, i) => {
+      const pet = new DouknowPet(this.ctx, skin, this.skinImages[skin.id], {
+        x: w * (skin.startXRatio != null ? skin.startXRatio : 0.3 + i * 0.4),
         y: h * 0.72,
-        sizeScale,
-        speedScale
+        sizeScale: 1,
+        speedScale: randomRange(0.85, 1.15)
       }, w, h);
       this.pets.push(pet);
-    }
+    });
   }
 
   bindLocalPointerEvents() {
@@ -778,14 +828,24 @@ class PetParty {
         this.mouseX = Number(data.x);
         this.mouseY = Number(data.y);
       } else if (data.type === 'douknow-pet-drag-start') {
-        const pet = this.pets[0];
-        if (pet) pet.startDrag(Number(data.x), Number(data.y), performance.now());
+        // 后画的在上层，倒序命中
+        const px = Number(data.x);
+        const py = Number(data.y);
+        this.bridgeDragPet = null;
+        for (let i = this.pets.length - 1; i >= 0; i--) {
+          if (this.pets[i].containsPoint(px, py)) {
+            this.bridgeDragPet = this.pets[i];
+            break;
+          }
+        }
+        if (this.bridgeDragPet) this.bridgeDragPet.startDrag(px, py, performance.now());
       } else if (data.type === 'douknow-pet-drag-move') {
-        const pet = this.pets[0];
-        if (pet) pet.dragTo(Number(data.x), Number(data.y), performance.now());
+        if (this.bridgeDragPet) this.bridgeDragPet.dragTo(Number(data.x), Number(data.y), performance.now());
       } else if (data.type === 'douknow-pet-drag-end') {
-        const pet = this.pets[0];
-        if (pet) pet.endDrag();
+        if (this.bridgeDragPet) {
+          this.bridgeDragPet.endDrag();
+          this.bridgeDragPet = null;
+        }
         this.postBounds();
       }
     });
@@ -827,11 +887,11 @@ class PetParty {
   }
 
   postBounds() {
-    if (!window.parent || window.parent === window || !this.pets[0]) return;
+    if (!window.parent || window.parent === window || this.pets.length === 0) return;
     window.parent.postMessage({
       source: 'douknow-pet',
       type: 'douknow-pet-bounds',
-      bounds: this.pets[0].getHitBounds()
+      bounds: this.pets.map((pet) => pet.getHitBounds())
     }, '*');
   }
 

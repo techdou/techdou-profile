@@ -1,14 +1,32 @@
-# macOS / Windows clutter
+# ── 操作系统杂项 ──
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Duplicate / backup copies — not versioned
-/pet - 副本/
-*- 副本/
-
-# Editor / OS cruft
-*.log
-node_modules/
+# ── 编辑器 / IDE 配置目录（开发软件配置不上传）──
 .vscode/
 .idea/
+.zed/
+.zcode/
+*.swp
+*.swo
+
+# ── 依赖与构建产物 ──
+node_modules/
+*.log
+
+# ── 密钥与本地环境变量（绝不入库）──
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+
+# ── 本地开发产物（素材生成中间件、参考图、验证截图、测试输出）──
+/outputs/
+prompt-test.txt
+
+# ── 本地副本 / 临时备份 ──
+/pet - 副本/
+*- 副本/

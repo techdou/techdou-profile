@@ -99,14 +99,57 @@
             transform: translateY(-1px);
         }
 
-        /* === HERO (Big Typographic Cover) === */
+        /* === HERO (Big Typographic Cover + Mask Reveal) === */
         .hero {
+            position: relative;
             min-height: 80vh;
             display: flex;
             align-items: center;
             padding: clamp(120px, 16vh, 200px) 0 clamp(40px, 6vh, 80px);
+            overflow: hidden;
+        }
+        .hero-base, .hero-reveal {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+        }
+        .hero-base {
+            /* 底层：纯净奶油底 + 细噪点，与作品列表统一克制基调 */
+            background-color: var(--bg-cream);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        .hero-reveal {
+            /* 上层：赤陶日照层林，hover 时光标周围局部显现 */
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s var(--ease);
+            background-color: var(--bg-cream);
+            background-image: url("assets/motifs/mountain-reveal.webp");
+            mask-image: radial-gradient(
+                circle 320px at var(--mx, -1000px) var(--my, -1000px),
+                white 0%,
+                rgba(255,255,255,0.7) 40%,
+                transparent 75%
+            );
+            -webkit-mask-image: radial-gradient(
+                circle 320px at var(--mx, -1000px) var(--my, -1000px),
+                white 0%,
+                rgba(255,255,255,0.7) 40%,
+                transparent 75%
+            );
+        }
+        .hero:hover .hero-reveal { opacity: 1; }
+        .hero .container {
+            position: relative;
+            z-index: 2;
         }
         .hero-title {
+            position: relative;
+            z-index: 2;
             font-family: var(--font-display);
             font-size: clamp(64px, 16vw, 220px);
             font-weight: 900;
@@ -139,17 +182,56 @@
         }
 
         .work-row {
+            position: relative;
             display: flex;
             gap: clamp(24px, 4vw, 64px);
             align-items: center;
             padding: clamp(32px, 4.5vh, 56px) 0;
             border-bottom: 1px solid var(--border-color);
-            transition: background 0.4s var(--ease);
+            transition: border-color 0.4s var(--ease);
             text-decoration: none;
             color: inherit;
+            overflow: hidden;
         }
+        .work-row::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            transition: background 0.4s var(--ease);
+            z-index: 0;
+        }
+        .work-row:hover::before { background: rgba(192,120,90,0.035); }
+        .work-row > * { position: relative; z-index: 2; }
+        .work-row > .work-reveal { z-index: 1; }
+
+        .work-reveal {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.4s var(--ease);
+            pointer-events: none;
+            z-index: 1;
+            background-color: var(--bg-cream);
+            background-image:
+                radial-gradient(circle 220px at var(--mx, -1000px) var(--my, -1000px), rgba(192,120,90,0.28) 0%, transparent 70%),
+                radial-gradient(circle 120px at var(--mx, -1000px) var(--my, -1000px), rgba(26,26,26,0.10) 0%, transparent 70%),
+                var(--reveal-image, none);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            mask-image: radial-gradient(circle 240px at var(--mx, -1000px) var(--my, -1000px), white 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(circle 240px at var(--mx, -1000px) var(--my, -1000px), white 0%, transparent 70%);
+        }
+        .work-row-plum .work-reveal { --reveal-image: url("assets/motifs/plum.webp"); }
+        .work-row-orchid .work-reveal { --reveal-image: url("assets/motifs/orchid.webp"); }
+        .work-row-bamboo .work-reveal { --reveal-image: url("assets/motifs/bamboo.webp"); }
+        .work-row-chrysanthemum .work-reveal { --reveal-image: url("assets/motifs/chrysanthemum.webp"); }
+        .work-row-token .work-reveal { --reveal-image: url("assets/motifs/token-panel.webp"); }
+        .work-row-scroll .work-reveal { --reveal-image: url("assets/motifs/ink-scroll.webp"); }
+        .work-row:hover .work-reveal { opacity: 1; }
+
         .work-row:nth-child(even) { flex-direction: row-reverse; }
-        .work-row:hover { background: rgba(192,120,90,0.035); }
 
         .work-icon-cell {
             flex-shrink: 0;
@@ -377,14 +459,19 @@
         /* === PET IFRAME === */
         #petFrame {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            right: 16px;
+            bottom: 16px;
+            width: 340px;
+            height: 300px;
             border: 0;
             z-index: 900;
             pointer-events: none;
             background: transparent;
+            opacity: 0.92;
+            transition: opacity 0.3s var(--ease);
+        }
+        @media (max-width: 700px) {
+            #petFrame { width: 240px; height: 220px; right: 8px; bottom: 8px; }
         }
 
         /* === RESPONSIVE === */
@@ -432,10 +519,12 @@
 <div class="bg-decoration bg-dot bg-dot-2"></div>
 
 <!-- Hero -->
-<header class="hero">
+<header class="hero hero-mask-stage">
+    <div class="hero-base" aria-hidden="true"></div>
+    <div class="hero-reveal" aria-hidden="true"></div>
     <div class="container">
-        <h1 class="hero-title reveal">
-            <span class="word-cn">Projects</span>
+        <h1 class="hero-title">
+            <span class="word-cn">I am</span>
             <em>· Techdou</em>
         </h1>
     </div>
@@ -447,7 +536,8 @@
         <div class="work-table">
 
             <!-- 01 TechDaily -->
-            <a href="https://news.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://news.techdou.com" target="_blank" class="work-row reveal work-row-plum">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-1">
                         <svg viewBox="0 0 100 100">
@@ -477,7 +567,8 @@
             </a>
 
             <!-- 02 Profile -->
-            <a href="https://profile.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://profile.techdou.com" target="_blank" class="work-row reveal work-row-orchid">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-2">
                         <svg viewBox="0 0 100 100">
@@ -505,7 +596,8 @@
             </a>
 
             <!-- 03 EduManager -->
-            <a href="https://edu.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://edu.techdou.com" target="_blank" class="work-row reveal work-row-bamboo">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-3">
                         <svg viewBox="0 0 100 100">
@@ -535,7 +627,8 @@
             </a>
 
             <!-- 04 Dual Universe -->
-            <a href="https://love.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://love.techdou.com" target="_blank" class="work-row reveal work-row-chrysanthemum">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-4">
                         <svg viewBox="0 0 100 100">
@@ -563,7 +656,8 @@
             </a>
 
             <!-- 05 Tokens -->
-            <a href="https://tokens.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://tokens.techdou.com" target="_blank" class="work-row reveal work-row-token">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-5">
                         <svg viewBox="0 0 100 100">
@@ -595,7 +689,8 @@
             </a>
 
             <!-- 06 LifeTime -->
-            <a href="https://blog.techdou.com" target="_blank" class="work-row reveal">
+            <a href="https://blog.techdou.com" target="_blank" class="work-row reveal work-row-scroll">
+                <div class="work-reveal" aria-hidden="true"></div>
                 <div class="work-icon-cell">
                     <div class="work-icon icon-6">
                         <svg viewBox="0 0 100 100">
@@ -683,8 +778,35 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
-<!-- DouknowAI Pet (iframe, permanently click-through; drag driven by postMessage) -->
-<iframe id="petFrame" src="./pet/pet.html" title="豆懂AI宠物" loading="lazy"></iframe>
+<!-- Mask Reveal: dynamic mouse-position spotlight for hero and project cards -->
+<script>
+(function () {
+    function trackMask(container, revealLayer) {
+        if (!container || !revealLayer) return;
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            revealLayer.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+            revealLayer.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+        container.addEventListener('mouseleave', () => {
+            revealLayer.style.setProperty('--mx', '-1000px');
+            revealLayer.style.setProperty('--my', '-1000px');
+        });
+    }
+
+    const hero = document.querySelector('.hero-mask-stage');
+    const heroReveal = document.querySelector('.hero-reveal');
+    trackMask(hero, heroReveal);
+
+    document.querySelectorAll('.work-row').forEach(row => {
+        const reveal = row.querySelector('.work-reveal');
+        trackMask(row, reveal);
+    });
+})();
+</script>
+
+<!-- Techdou Pets: 科技豆 + 豆懂AI (iframe, permanently click-through; drag driven by postMessage) -->
+<iframe id="petFrame" src="./pet/pet.html" title="科技豆与豆懂AI宠物" loading="lazy"></iframe>
 <script>
 (function () {
     const PET_SOURCE = 'techdaily-parent';
@@ -693,31 +815,43 @@
     // 关键：iframe 全程保持 pointer-events: none（CSS 已设置），
     // 这样所有指针事件始终落在父页面 window 上，pointerup 必然能收到，
     // iframe 永远不会拦截页面的链接/按钮点击。拖拽完全靠 postMessage 驱动。
-    let hitBounds = null;
+    let hitBoundsList = [];
     let dragging = false;
 
+    function postToPet(type, data) {
+        if (!petFrame.contentWindow) return;
+        petFrame.contentWindow.postMessage({ source: PET_SOURCE, type, ...data }, '*');
+    }
+
+    function updatePetSurface() {
+        const rect = petFrame.getBoundingClientRect();
+        postToPet('douknow-pet-surface', {
+            rect: { left: 0, top: 0, width: rect.width, height: rect.height }
+        });
+    }
+
+    petFrame.addEventListener('load', updatePetSurface);
+    window.addEventListener('resize', updatePetSurface);
+
     function pointerInBounds(x, y) {
-        if (!hitBounds) return false;
-        return x >= hitBounds.left && x <= hitBounds.right &&
-               y >= hitBounds.top && y <= hitBounds.bottom;
+        return hitBoundsList.some(b =>
+            x >= b.left && x <= b.right &&
+            y >= b.top && y <= b.bottom
+        );
     }
 
     // 将鼠标坐标传给 iframe（始终跟随，用于 flee 行为）
+    function getPetLocalPoint(e) {
+        const rect = petFrame.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
     window.addEventListener('pointermove', (e) => {
+        const { x, y } = getPetLocalPoint(e);
         if (dragging) {
-            petFrame.contentWindow.postMessage({
-                source: PET_SOURCE,
-                type: 'douknow-pet-drag-move',
-                x: e.clientX,
-                y: e.clientY
-            }, '*');
+            postToPet('douknow-pet-drag-move', { x, y });
         } else {
-            petFrame.contentWindow.postMessage({
-                source: PET_SOURCE,
-                type: 'douknow-pet-pointer',
-                x: e.clientX,
-                y: e.clientY
-            }, '*');
+            postToPet('douknow-pet-pointer', { x, y });
         }
     }, { passive: true });
 
@@ -727,22 +861,15 @@
         if (e.button !== 0 && e.pointerType === 'mouse') return; // 只响应主键
         if (!pointerInBounds(e.clientX, e.clientY)) return;
         dragging = true;
-        petFrame.contentWindow.postMessage({
-            source: PET_SOURCE,
-            type: 'douknow-pet-drag-start',
-            x: e.clientX,
-            y: e.clientY
-        }, '*');
+        const { x, y } = getPetLocalPoint(e);
+        postToPet('douknow-pet-drag-start', { x, y });
         e.preventDefault();
     });
 
     const endDrag = () => {
         if (!dragging) return;
         dragging = false;
-        petFrame.contentWindow.postMessage({
-            source: PET_SOURCE,
-            type: 'douknow-pet-drag-end'
-        }, '*');
+        postToPet('douknow-pet-drag-end', {});
     };
     window.addEventListener('pointerup', endDrag);
     window.addEventListener('pointercancel', endDrag);
@@ -752,13 +879,24 @@
         if (document.hidden) endDrag();
     });
 
-    // 接收 iframe 上报的宠物命中区，用于决定何时接管指针；
+    // 接收 iframe 上报的所有宠物命中区（数组），用于决定何时接管指针；
     // 命中区附近给个 grab/grabbing 手型反馈（仍不拦截点击）
     window.addEventListener('message', (event) => {
         const data = event.data || {};
         if (!data || data.source !== 'douknow-pet') return;
         if (data.type === 'douknow-pet-bounds' && data.bounds) {
-            hitBounds = data.bounds;
+            const rect = petFrame.getBoundingClientRect();
+            const list = Array.isArray(data.bounds) ? data.bounds : [data.bounds];
+            hitBoundsList = list.map(b => ({
+                left: b.left + rect.left,
+                top: b.top + rect.top,
+                right: b.right + rect.left,
+                bottom: b.bottom + rect.top,
+                x: b.x + rect.left,
+                y: b.y + rect.top,
+                size: b.size,
+                dragging: b.dragging
+            }));
         }
     });
 
