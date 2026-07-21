@@ -123,26 +123,37 @@
             z-index: 0;
         }
         .hero-reveal {
-            /* 上层：赤陶日照层林，hover 时光标周围局部显现 */
+            /* 上层：水墨远山长卷，常驻低透明可见，hover 时聚光灯内增强显现 */
             z-index: 1;
-            opacity: 0;
-            transition: opacity 0.5s var(--ease);
-            background-color: var(--bg-cream);
-            background-image: url("assets/motifs/mountain-reveal.webp");
+            opacity: 0.32;
+            transition: opacity 0.6s var(--ease);
+            background-color: transparent;
+            background-image: url("assets/motifs/mountain-ink-hero.webp");
+            background-size: cover;
+            background-position: center bottom;
+            /* hover 时整层提亮，再叠加聚光灯局部清晰 */
             mask-image: radial-gradient(
-                circle 320px at var(--mx, -1000px) var(--my, -1000px),
+                circle 340px at var(--mx, -1000px) var(--my, -1000px),
                 white 0%,
-                rgba(255,255,255,0.7) 40%,
-                transparent 75%
+                rgba(255,255,255,0.85) 45%,
+                transparent 78%
             );
             -webkit-mask-image: radial-gradient(
-                circle 320px at var(--mx, -1000px) var(--my, -1000px),
+                circle 340px at var(--mx, -1000px) var(--my, -1000px),
                 white 0%,
-                rgba(255,255,255,0.7) 40%,
-                transparent 75%
+                rgba(255,255,255,0.85) 45%,
+                transparent 78%
             );
         }
-        .hero:hover .hero-reveal { opacity: 1; }
+        .hero:hover .hero-reveal { opacity: 0.75; }
+        /* 移动端无 hover：常驻可见，去掉聚光灯 mask（否则 mask 在圆心外会裁掉底图） */
+        @media (hover: none) {
+            .hero-reveal {
+                opacity: 0.28;
+                mask-image: none;
+                -webkit-mask-image: none;
+            }
+        }
         .hero .container {
             position: relative;
             z-index: 2;
@@ -456,22 +467,17 @@
         .reveal-d1 { transition-delay: 0.1s; }
         .reveal-d2 { transition-delay: 0.2s; }
 
-        /* === PET IFRAME === */
+        /* === PET IFRAME (全屏铺满，pointer-events: none 不挡页面交互) === */
         #petFrame {
             position: fixed;
-            right: 16px;
-            bottom: 16px;
-            width: 340px;
-            height: 300px;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
             border: 0;
             z-index: 900;
             pointer-events: none;
             background: transparent;
             opacity: 0.92;
-            transition: opacity 0.3s var(--ease);
-        }
-        @media (max-width: 700px) {
-            #petFrame { width: 240px; height: 220px; right: 8px; bottom: 8px; }
         }
 
         /* === RESPONSIVE === */
@@ -832,6 +838,9 @@
 
     petFrame.addEventListener('load', updatePetSurface);
     window.addEventListener('resize', updatePetSurface);
+    // 兜底：iframe load 与 PetParty init 存在时序竞争，延迟重发确保 surface 同步
+    setTimeout(updatePetSurface, 800);
+    setTimeout(updatePetSurface, 2000);
 
     function pointerInBounds(x, y) {
         return hitBoundsList.some(b =>
