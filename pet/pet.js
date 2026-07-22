@@ -29,6 +29,9 @@ const PET_CONFIG = {
   breathAmplitude: 0.025,
   breathFrequency: 1.35,
   planePadding: 6,
+  // 宠物间分离（防止穿插/重叠）
+  petSeparationDist: 105,   // 在此距离内开始互相推开
+  petSeparationForce: 0.45, // 推力强度
   // 云朵素材（PNG，宽高比约 2:1）
   cloudScaleW: 1.7,
   cloudScaleH: 0.85,
@@ -874,6 +877,12 @@ class PetParty {
 
     for (const pet of this.pets) {
       pet.update(dt, timestamp, this.mouseX, this.mouseY);
+    }
+
+    // 宠物间分离：防止两只宠物重叠/穿插
+    this.applyPetSeparation(dt);
+
+    for (const pet of this.pets) {
       pet.draw(this.ctx);
     }
 
@@ -884,6 +893,46 @@ class PetParty {
     }
 
     this.rafId = requestAnimationFrame((t) => this.loop(t));
+  }
+
+  applyPetSeparation(dt) {
+    const pets = this.pets;
+    const sepDist = PET_CONFIG.petSeparationDist;
+    const force = PET_CONFIG.petSeparationForce;
+    const dtFactor = dt / 16;
+
+    for (let i = 0; i < pets.length; i++) {
+      for (let j = i + 1; j < pets.length; j++) {
+        const a = pets[i];
+        const b = pets[j];
+        if (a.isDragging || b.isDragging) continue;
+
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist >= sepDist || dist < 0.01) continue;
+
+        const nx = dx / dist;
+        const ny = dy / dist;
+        const strength = (1 - dist / sepDist) * force;
+
+        // 速度层面：软推开
+        a.vx -= nx * strength * dtFactor;
+        a.vy -= ny * strength * dtFactor;
+        b.vx += nx * strength * dtFactor;
+        b.vy += ny * strength * dtFactor;
+
+        // 位置层面：硬分离（防止完全重叠）
+        const minDist = (a.size + b.size) * 0.45;
+        if (dist < minDist) {
+          const overlap = (minDist - dist) * 0.5;
+          a.x -= nx * overlap;
+          a.y -= ny * overlap;
+          b.x += nx * overlap;
+          b.y += ny * overlap;
+        }
+      }
+    }
   }
 
   postBounds() {
