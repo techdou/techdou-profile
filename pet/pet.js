@@ -174,6 +174,7 @@ class DouknowPet {
     this.canvasW = canvasWidth;
     this.canvasH = canvasHeight;
     this.bounds = { left: 0, top: 0, width: canvasWidth, height: canvasHeight };
+    this.exclusions = []; // 禁区矩形列表（父页面下发：导航/卡片/标题等不可进入区域）
 
     this.sizeScale = opts.sizeScale || 1;
     this.speedScale = opts.speedScale || 1;
@@ -246,6 +247,31 @@ class DouknowPet {
       minY: this.bounds.top + half + pad,
       maxY: this.bounds.top + this.bounds.height - half - pad
     };
+  }
+
+  setExclusions(rects) {
+    this.exclusions = (Array.isArray(rects) ? rects : []).filter(r =>
+      r && Number.isFinite(r.left) && Number.isFinite(r.top) && r.width > 0 && r.height > 0
+    );
+  }
+
+  // 禁区：走进矩形就被推到最近的一条边，并反弹速度（导航/卡片/标题不被遮挡）
+  applyExclusions() {
+    if (!this.exclusions.length) return;
+    const pad = this.size * 0.5 + 8;
+    for (const e of this.exclusions) {
+      const left = e.left - pad, right = e.left + e.width + pad;
+      const top = e.top - pad, bottom = e.top + e.height + pad;
+      if (this.x <= left || this.x >= right || this.y <= top || this.y >= bottom) continue;
+      const dl = this.x - left, dr = right - this.x;
+      const dtp = this.y - top, db = bottom - this.y;
+      const m = Math.min(dl, dr, dtp, db);
+      if (m === dl) { this.x = left; if (this.vx > 0) this.vx = -this.vx; }
+      else if (m === dr) { this.x = right; if (this.vx < 0) this.vx = -this.vx; }
+      else if (m === dtp) { this.y = top; if (this.vy > 0) this.vy = -this.vy; }
+      else { this.y = bottom; if (this.vy < 0) this.vy = -this.vy; }
+    }
+    this.updateDirection();
   }
 
   clampToBounds() {
@@ -380,6 +406,7 @@ class DouknowPet {
     else if (this.state === PetState.SLEEP) this.updateSleep(dt, time);
 
     this.applyBoundaries();
+    this.applyExclusions();
     this.squash *= 0.88;
     this.breathPhase += (dt / 1000) * PET_CONFIG.breathFrequency * Math.PI * 2;
     this.updateTalk(dt);
@@ -827,6 +854,8 @@ class PetParty {
 
       if (data.type === 'douknow-pet-surface') {
         this.setSurfaceRect(data.rect);
+      } else if (data.type === 'douknow-pet-exclusions') {
+        this.setExclusions(data.rects);
       } else if (data.type === 'douknow-pet-pointer') {
         this.mouseX = Number(data.x);
         this.mouseY = Number(data.y);
@@ -864,6 +893,11 @@ class PetParty {
     };
     this.pendingSurfaceRect = safe;
     for (const pet of this.pets) pet.setBounds(safe);
+  }
+
+  setExclusions(rects) {
+    const list = Array.isArray(rects) ? rects : [];
+    for (const pet of this.pets) pet.setExclusions(list);
   }
 
   loop(timestamp) {
@@ -951,8 +985,9 @@ class PetParty {
   }
 }
 
+const bootParty = () => { window.__party = new PetParty(); };
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new PetParty());
+  document.addEventListener('DOMContentLoaded', bootParty);
 } else {
-  new PetParty();
+  bootParty();
 }

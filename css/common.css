@@ -12,6 +12,12 @@
     --text-muted: #8a8a8a;
     --accent-warm: #e8d4c0;
     --accent-terracotta: #c0785a;
+    /* 小豆服饰提取配色（assets/model/小豆.glb 角色形象） */
+    --bean-sage: #99906f;        /* 开衫·抹茶橄榄 */
+    --bean-sage-deep: #7a7a58;   /* 开衫加深（文字可用） */
+    --bean-wheat: #dfc3a7;       /* 裤子·小麦米 */
+    --bean-shirt: #f6f0eb;       /* 衬衫·暖白 */
+    --bean-ink: #211a16;         /* 头发·墨褐 */
     --border-color: rgba(0,0,0,0.08);
     --border-strong: rgba(0,0,0,0.16);
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);

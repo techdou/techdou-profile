@@ -4,7 +4,7 @@ Techdou 的个人站点（纯静态多页），首页为项目展示页，并附
 
 ## 功能
 
-- **首页 `index.html`**：项目展示、领域卡片、时间线，配水墨风装饰素材（`assets/motifs/`）。
+- **首页 `index.html`**：项目展示、领域卡片、时间线，配水墨风装饰素材（`assets/motifs/`）。首页中部有"小豆滚动镜头剧场"——基于 three.js 的 3D 角色场景，随滚动切换机位（CDN 加载 three@0.160，模型与环境贴图本地）。
 - **简历页 `resume.html`**：在线简历，顶部按钮可下载 PDF（`assets/douxiulu_resume.pdf`）。
 - **桌面宠物**：首页 iframe 内嵌的双宠物系统——
   - 🟢 **科技豆**（techdou.com，骑筋斗云）
@@ -23,6 +23,8 @@ techdou-profile/
 ├── assets/                 站点静态资源
 │   ├── domain-bg-*.webp      各领域卡片背景图
 │   ├── motifs/               首页水墨风装饰素材
+│   ├── env/                  3D 剧场环境贴图（草地 PBR 三件套 + 天空 HDR）
+│   ├── model/                3D 剧场角色模型（小豆.glb + 抠图/PNG）
 │   ├── photo.webp            头像
 │   ├── wechat.webp           微信二维码
 │   └── douxiulu_resume.pdf   简历 PDF
