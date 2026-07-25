@@ -1,0 +1,101 @@
+name: Deploy to techdou.github.io
+
+# 触发条件：push 到 main 分支，且只网站相关文件有变动时才跑
+# 避免改 .gitignore / .github 等开发文件时无意义触发部署
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'resume.html'
+      - 'css/**'
+      - 'assets/**'
+      - 'pet/**'
+      - 'README.md'
+      - '.github/workflows/deploy-pages.yml'
+
+  # 允许手动从 Actions 页面触发（首次配置或重试时用）
+  workflow_dispatch:
+
+permissions:
+  contents: read  # 只读当前仓库，写权限靠 SSH deploy key 到目标仓库
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false  # 部署不抢跑，避免中途取消导致状态不一致
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source (techdou-profile)
+        uses: actions/checkout@v4
+        with:
+          path: source
+          fetch-depth: 1  # 浅克隆，只拿最新 commit，部署不需要历史
+
+      - name: Configure SSH for target repo
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PAGES_DEPLOY_KEY }}" > ~/.ssh/pages_deploy_key
+          chmod 600 ~/.ssh/pages_deploy_key
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          # 配置 SSH 用这把密钥访问 github.com
+          cat <<EOF >> ~/.ssh/config
+          Host github.com
+            HostName github.com
+            User git
+            IdentityFile ~/.ssh/pages_deploy_key
+            IdentitiesOnly yes
+          EOF
+
+      - name: Checkout target (techdou.github.io)
+        run: |
+          git clone --depth 1 git@github.com:techdou/techdou.github.io.git target
+          cd target
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync website files (source → target)
+        run: |
+          # 只同步网站运行所需的文件，不动 .git/.github/.gitignore/outputs 等
+          # 用 rsync，--delete 保证 target 里多余的旧文件被清掉（如重命名后的残留）
+          # 但排除 target/.git（保留 git 历史）和 CNAME（自定义域名配置，如果以后加）
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.gitignore' \
+            --exclude='.gitattributes' \
+            --exclude='outputs' \
+            --exclude='prompt-test.txt' \
+            --exclude='CNAME' \
+            --exclude='.DS_Store' \
+            --exclude='Thumbs.db' \
+            --exclude='desktop.ini' \
+            --exclude='*.bak' \
+            --exclude='*- 副本' \
+            source/ target/
+
+          # 同步状态展示（不 push，只看 diff）
+          cd target
+          echo "=== 待提交的改动 ==="
+          git status --short
+          echo ""
+          echo "=== diff 统计 ==="
+          git diff --stat HEAD
+
+      - name: Commit and push to techdou.github.io
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          cd target
+          # 没有改动就跳过（rsync 已改工作区，看 porcelain 最准）
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "✅ 没有需要同步的改动，跳过 push"
+            exit 0
+          fi
+          git add -A
+          # commit message 用单行，避免多行 commit message 把 [skip ci] 挤丢
+          git commit -m "[deploy] Sync from techdou-profile@${SOURCE_SHA::7} [skip ci]"
+          git push origin main
+          echo "✅ 已同步到 techdou.github.io"
