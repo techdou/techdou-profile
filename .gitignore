@@ -2,18 +2,24 @@
 .DS_Store
 Thumbs.db
 desktop.ini
+.bash_history
 
 # ── 编辑器 / IDE 配置目录（开发软件配置不上传）──
 .vscode/
 .idea/
 .zed/
 .zcode/
+.fleet/
 *.swp
 *.swo
+*~
+*.sublime-workspace
+*.sublime-project
 
 # ── 依赖与构建产物 ──
 node_modules/
 *.log
+.cache/
 
 # ── 密钥与本地环境变量（绝不入库）──
 .env
@@ -22,6 +28,11 @@ node_modules/
 *.pem
 *.key
 *.p12
+*.pfx
+secrets.json
+credentials.json
+*_rsa
+*_ed25519
 
 # ── 本地开发产物（素材生成中间件、参考图、验证截图、测试输出）──
 /outputs/
@@ -30,3 +41,8 @@ prompt-test.txt
 # ── 本地副本 / 临时备份 ──
 /pet - 副本/
 *- 副本/
+
+# ── AI 工具会话产物（不入库）──
+.claude/
+.cursor/
+.aider*
