@@ -66,15 +66,15 @@ const PET_CONFIG = {
         '技术是手段，生活才是目的。'
       ],
       frames: {
-        idle: './assets/techdou/idle.webp',
-        idleWink: './assets/techdou/idle-wink.webp',
-        walkFront1: './assets/techdou/walk-front-1.webp',
-        walkFront2: './assets/techdou/walk-front-2.webp',
-        walkLeft: './assets/techdou/walk-left.webp',
-        walkRight: './assets/techdou/walk-right.webp',
-        walkBack: './assets/techdou/walk-back-1.webp',
-        sleep: './assets/techdou/sleep.webp',
-        cloud: './assets/techdou/jindou-cloud.webp'
+        idle: './assets/techdou/idle.webp?v=2',
+        idleWink: './assets/techdou/idle-wink.webp?v=2',
+        walkFront1: './assets/techdou/walk-front-1.webp?v=2',
+        walkFront2: './assets/techdou/walk-front-2.webp?v=2',
+        walkLeft: './assets/techdou/walk-left.webp?v=2',
+        walkRight: './assets/techdou/walk-right.webp?v=2',
+        walkBack: './assets/techdou/walk-back-1.webp?v=2',
+        sleep: './assets/techdou/sleep.webp?v=2',
+        cloud: './assets/techdou/jindou-cloud.webp?v=2'
       }
     },
     {
@@ -102,15 +102,15 @@ const PET_CONFIG = {
       cloudScaleH: 0.71,
       cloudOffsetY: 0.2,
       frames: {
-        idle: './assets/douknow/idle.webp',
-        idleWink: './assets/douknow/idle-wink.webp',
-        walkFront1: './assets/douknow/walk-front-1.webp',
-        walkFront2: './assets/douknow/walk-front-2.webp',
-        walkLeft: './assets/douknow/walk-left.webp',
-        walkRight: './assets/douknow/walk-right.webp',
-        walkBack: './assets/douknow/walk-back-1.webp',
-        sleep: './assets/douknow/sleep.webp',
-        cloud: './assets/douknow/fruit-plate.webp'
+        idle: './assets/douknow/idle.webp?v=2',
+        idleWink: './assets/douknow/idle-wink.webp?v=2',
+        walkFront1: './assets/douknow/walk-front-1.webp?v=2',
+        walkFront2: './assets/douknow/walk-front-2.webp?v=2',
+        walkLeft: './assets/douknow/walk-left.webp?v=2',
+        walkRight: './assets/douknow/walk-right.webp?v=2',
+        walkBack: './assets/douknow/walk-back-1.webp?v=2',
+        sleep: './assets/douknow/sleep.webp?v=2',
+        cloud: './assets/douknow/fruit-plate.webp?v=2'
       }
     }
   ]
